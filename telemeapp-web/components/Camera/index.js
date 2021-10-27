@@ -4,9 +4,10 @@ export function Camera(){
     return(
         <div className={styles.container}>
             <img 
-                src="logo_sol.png"
+                // src="logo_sol.png"
+                src="https://img.ibxk.com.br/2016/10/04/04184843355196.gif"
                 alt="Logo Solares"
-                height="100%"
+                width="90%"
                 className={styles.logoSol}
             />
         </div>

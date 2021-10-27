@@ -4,7 +4,8 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  height: calc(100vh - 6rem);
+  height: 100%;
+  /* height: calc(100vh - 6rem); */
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
@@ -17,21 +18,32 @@
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
-  background-color: #4e1e1e;
+  min-height: 30vh;
+  /* background-color: #4e1e1e; */
+  padding: 1rem;
 }
 
 .meio {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   width: 100%;
-  background-color: #204e1e;
+  height: 20vh;
+  justify-content: space-between;
+  /* background-color: #204e1e; */
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  overflow: auto;
+  white-space: nowrap;
 }
 
 .fim {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   flex-wrap: wrap;
   width: 100%;
-  background-color: #3b1e4e;
+  min-height: 25vh;
+  /* background-color: #3b1e4e; */
+  padding: 1rem;
 }

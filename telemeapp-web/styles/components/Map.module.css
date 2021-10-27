@@ -1,9 +1,13 @@
 .container {
-    width: 60%;
-    height: 100%;
+    flex: 2.5;
+    height: 300px;
+    min-width: 300px;
     padding: 0;
     margin: 0;
-    background-color: rgb(46, 116, 25);
+    background-color: #1C1C49;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 0.8rem;
 }
 
 @media screen and (max-width: 930px) {

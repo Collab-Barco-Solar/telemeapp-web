@@ -16,7 +16,7 @@ body {
   }
 }
 
-@media (max-width: 720px){
+@media (max-width: 800px){
   html,
   body{
       font-size: 87.5%;
