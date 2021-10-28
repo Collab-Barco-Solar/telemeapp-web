@@ -18,7 +18,7 @@ export default function Home(){
 
     useEffect(() => {
         socket.on('info', (data) => {
-        // console.log(data);
+        console.log(data);
         setInfo(data);
         });
     }, [])

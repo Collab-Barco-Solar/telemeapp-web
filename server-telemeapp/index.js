@@ -4,12 +4,13 @@ const io = require('socket.io')(4000, {
     }
 });
 
-let dados = ''
+let dados = '20.000,10.000'
+let vetorDados = ['20.000,10.000','20.000,10.000','20.000,10.000']
 
 io.on("connection", socket => {
     console.log("USUARIO: " + socket.id);
 
-    socket.emit("info", dados); // emite apenas para quem se conectou no momento
+    socket.emit("info", vetorDados); // emite apenas para quem se conectou no momento
 
     socket.on("newinfo", (data) => {
         console.log(data);
