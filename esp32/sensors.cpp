@@ -50,7 +50,7 @@ float get_mppt_current(){ //Verificar a necessidade de fazer várias leituras e 
 float get_motor_current(){
     ads_1115.setGain(GAIN_ONE);        // 1x gain   + 4.096V  1 bit = 0.0625
 
-    int16_t result = ads_1115.readADC_SingleEnded(ADS1115_MOTOR_CURRENT
+    int16_t result = ads_1115.readADC_SingleEnded(ADS1115_MOTOR_CURRENT);
     float voltageRead = result*(2*LIMIT_GAIN_ONE/(RESOLUTION_16BIT-1.0))/1000.0; 
 
     float hallAmps = 0;

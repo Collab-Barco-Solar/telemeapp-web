@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <Adafruit_ADS1015.h>
-#include <MCP3221.h>
+//#include <MCP3221.h>
 #include "DHT.h"
  
 

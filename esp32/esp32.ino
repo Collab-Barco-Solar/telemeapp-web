@@ -1,5 +1,7 @@
 #include "wifi.h"
 #include "socketio.h"
+#include "sensors.h"
+#include "gps.h"
 
 void setup()
 {
@@ -7,6 +9,8 @@ void setup()
   delay(250);
   init_wifi();
   init_socket();
+  setupDHT();
+  setupADS();
 }
 
 
