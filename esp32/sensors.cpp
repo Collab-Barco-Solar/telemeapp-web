@@ -19,7 +19,8 @@ float get_battery_voltage(){
 
 float get_font_voltage(){
     int bitsRead = analogRead(PIN_12V_VM);
-    float voltageRead = bitsRead * ESP_MAXIMUM_VOLTAGE_IN / 1023.0;  //Convert from bits to the float number representing the voltage read
+    float voltageRead = bitsRead * ESP_MAXIMUM_VOLTAGE_IN / 4095.0;  //Convert from bits to the float number representing the voltage read
+    //Serial.println("Tensão lida alim. : " + String(voltageRead));
 
     //Find voltage before voltage divider
     float R1 = 47000.0, R2 = 10000.0;
@@ -34,7 +35,8 @@ float get_font_current(){ //Verificar a necessidade de fazer várias leituras e 
     float voltageRead = result*(2*LIMIT_GAIN_ONE/(RESOLUTION_16BIT-1.0))/1000.0; 
 
     //Convert the voltage to the current in the ACS712
-    return (voltageRead - ACS712_VCC/2.0)*1000.0/ACS712_OUTPUT_SENSITIVITY;
+    float offset = 0.41;
+    return ((voltageRead - ACS712_VCC/2.0)*1000.0/ACS712_OUTPUT_SENSITIVITY) - offset;
 }
 
 float get_mppt_current(){ //Verificar a necessidade de fazer várias leituras e pegar a maior ou a média
@@ -42,9 +44,11 @@ float get_mppt_current(){ //Verificar a necessidade de fazer várias leituras e 
 
     int16_t result = ads_1115.readADC_SingleEnded(ADS1115_MPPT);
     float voltageRead = result*(2*LIMIT_GAIN_TWO_THIRDS/(RESOLUTION_16BIT - 1.0))/1000.0; 
+    //Serial.println("Tensão corrente MPPT: " + String(voltageRead));
   
     //Convert the voltage to the current in the ACS712
-    return (voltageRead - ACS712_VCC/2.0)*1000.0/ACS712_OUTPUT_SENSITIVITY;
+    float offset = 0.41;
+    return ((voltageRead - ACS712_VCC/2.0)*1000.0/ACS712_OUTPUT_SENSITIVITY) - offset;
 }
 
 float get_motor_current(){

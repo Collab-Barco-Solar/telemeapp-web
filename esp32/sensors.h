@@ -12,8 +12,8 @@
 #define I2C_ADS1115  0x48  // Endereco do medidor ADC da bateria A0 - Batery Bank voltage // A1 - PV modules voltage
 
 //ADS read
-#define LIMIT_GAIN_ONE 4.096
-#define LIMIT_GAIN_TWO_THIRDS 6.144
+#define LIMIT_GAIN_ONE 4096.0
+#define LIMIT_GAIN_TWO_THIRDS 6144.0
 #define RESOLUTION_16BIT 65536.0
 #define ADS1115_MPPT 0
 #define ADS1115_FONT_CURRENT 1

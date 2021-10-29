@@ -4,7 +4,7 @@ SocketIoClient socket;
 
 // inicializa o socket.io-client
 void init_socket(){
-  socket.begin("192.168.15.37",4000);
+  socket.begin("192.168.183.6",4000);
 
   //Usa essa funcao caso queira receber algo do servidor socket
 //  socket.on("info", event);

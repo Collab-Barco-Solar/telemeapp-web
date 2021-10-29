@@ -39,9 +39,9 @@ void loop()
     String gps = get_gps_info();
 
     String all_info = String(current_mppt) + "," + String(current_alimentation) + "," + String(voltage_batteries) + "," + String(current_motor) + "," + String(temperature) + "," + String(humidity) + "," + String(voltage_alimentation) + "," + gps;
-    send_socket(all_info);
+//    send_socket(all_info);
+    Serial.println(all_info);
 
-    // String mensagem = "-20.0000000,-40.0000000,15.00";
-    // send_socket(String(currentmillis));
+    send_socket(String(all_info));
   }
 }
