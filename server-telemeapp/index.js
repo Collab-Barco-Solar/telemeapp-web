@@ -1,10 +1,12 @@
-const io = require('socket.io')(4000, {
+const PORT = process.env.PORT || 4000
+
+const io = require('socket.io')(PORT, {
     cors: {
         origin: '*'
     }
 });
 
-let dados = '20.000,10.000'
+let dados = '0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00000000,0.00000000,0.00'
 
 //String(current_mppt) + "," + String(current_alimentation) + "," + String(voltage_batteries) + "," + String(current_motor) + "," + String(temperature) + "," + String(humidity) + "," + String(voltage_alimentation) + "," + gps;
 
@@ -24,7 +26,8 @@ function saveDataVector(data){
 io.on("connection", socket => {
     console.log("USUARIO: " + socket.id);
 
-    socket.emit("info", vetorDados); // emite apenas para quem se conectou no momento
+    socket.emit("allinfo", vetorDados); // emite apenas para quem se conectou no momento
+    // console.log(vetorDados)
 
     socket.on("newinfo", (data) => {
         // console.log(data);
@@ -41,7 +44,7 @@ io.on("connection", socket => {
             long: arrayDados[8],
             speed: arrayDados[9]
         }
-        console.log(dados);
+        // console.log(dados);
         
         saveDataVector(dados)
         io.emit("info", dados); // emite para todos

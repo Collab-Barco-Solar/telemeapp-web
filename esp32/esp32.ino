@@ -27,7 +27,6 @@ void loop()
 
   if (currentmillis - previousmillis >= 1000)
   {
-    previousmillis = currentmillis;
 
     float current_mppt = get_mppt_current();
     float current_alimentation = get_font_current();
@@ -43,5 +42,6 @@ void loop()
     Serial.println(all_info);
 
     send_socket(String(all_info));
+    previousmillis = currentmillis;
   }
 }

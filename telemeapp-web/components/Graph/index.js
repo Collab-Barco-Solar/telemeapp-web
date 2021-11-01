@@ -134,7 +134,7 @@ export function CompleteGraph() {
                 <LineChart
                     margin={{ top: 0, left: 0, right: 0, bottom: 0 }}
                     data={dadosRecebidos.map(organizarDadosParaGrafico)} >
-                    <CartesianGrid verticalFill={['rgba(28, 28, 73, 1)', 'rgba(0, 0, 0, 1)']} horizontalFill={['#ccc', '#fff']} />
+                    <CartesianGrid verticalFill={['rgba(28, 28, 73, 1)', 'rgba(28, 23, 73, 1)']} horizontalFill={['#ccc', '#fff']} />
                     <Tooltip contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0)' }} />
                     <XAxis dataKey="tempo" stroke='white' minTickGap={50} interval="preserveStartEnd" style={{
                         fontSize: fontSizeAxis,
@@ -174,6 +174,7 @@ export function CompleteGraph() {
 
 export function MiniGraph(props) {
     const dadosExibidos = [props.type];
+    var dadosRecebidos = props.data
 
     // Pega o Array completo retirado do banco de dados e extrai a informação a ser exibida no gráfico
     const organizarDadosParaMiniGrafico = (linhaAtual) => {
@@ -192,7 +193,7 @@ export function MiniGraph(props) {
             <ResponsiveContainer width="100%" height="95%">
                 <LineChart
                     margin={{ top: 0, left: 0, right: 0, bottom: 0 }}
-                    data={dadosRecebidos.map(organizarDadosParaMiniGrafico)} >
+                    data={dadosRecebidos?.map(organizarDadosParaMiniGrafico)} >
                     <CartesianGrid verticalFill={['rgba(28, 28, 73, 1)', 'rgba(0, 0, 0, 1)']} horizontalFill={['#ccc', '#fff']} />
                     <Tooltip contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0)' }} />
                     <XAxis dataKey="tempo" stroke='white' minTickGap={50} interval="preserveStartEnd" style={{
