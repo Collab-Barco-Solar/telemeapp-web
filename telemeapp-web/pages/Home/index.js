@@ -55,7 +55,7 @@ export default function Home(){
                     <MiniGraph type="temperature" color="#FF8405" data={vectorData}/>
                 </div>
                 <div className={styles.fim}>
-                    <CompleteGraph />
+                    <CompleteGraph data={vectorData}/>
                     <Times />
                     <Results />
                 </div>

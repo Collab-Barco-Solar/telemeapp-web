@@ -19,7 +19,6 @@ function saveDataVector(data){
         vetorDados.shift()
     }
     vetorDados.push(data)
-    // console.log("entrou aqui")
 }
 
 
@@ -31,6 +30,9 @@ io.on("connection", socket => {
 
     socket.on("newinfo", (data) => {
         // console.log(data);
+        let date_ob = new Date()
+        let time = date_ob.toLocaleString('en-GB',  { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute:'2-digit', second:'2-digit'})
+
         let arrayDados = data.split(',');
         dados = {
             current_mppt: arrayDados[0],
@@ -42,7 +44,8 @@ io.on("connection", socket => {
             voltage_alimentation: arrayDados[6],
             lat: arrayDados[7],
             long: arrayDados[8],
-            speed: arrayDados[9]
+            speed: arrayDados[9],
+            time: time
         }
         // console.log(dados);
         
