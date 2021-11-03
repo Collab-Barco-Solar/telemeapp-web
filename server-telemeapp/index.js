@@ -53,3 +53,4 @@ io.on("connection", socket => {
         io.emit("info", dados); // emite para todos
     })
 })
+

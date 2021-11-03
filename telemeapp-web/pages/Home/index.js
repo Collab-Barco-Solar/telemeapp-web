@@ -8,7 +8,7 @@ import { Times } from '../../components/Times';
 import socket from '../../services/socketio';
 import styles from '../../styles/pages/Home.module.css';
 
-const MapWithNoSSR = dynamic(() => import("../../components/Map"), {
+const Map = dynamic(() => import("../../components/Map"), {
     ssr: false
 })
 
@@ -41,7 +41,7 @@ export default function Home(){
             <Header />
             <div className={styles.container}>
                 <div className={styles.topo}>
-                    <MapWithNoSSR />
+                    <Map admin={false} containerHeight={300} mapHeight="100%"/>
                     <Camera />
                 </div>
                 <div className={styles.meio}>
