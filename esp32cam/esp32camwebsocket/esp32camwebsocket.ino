@@ -144,7 +144,7 @@ void loop() {
         }
         
         webSocket.sendBIN(fb->buf,fb->len);
-        Serial.println("Image sent");
+//        Serial.println("Image sent");
         esp_camera_fb_return(fb); 
     }
 }

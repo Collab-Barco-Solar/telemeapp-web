@@ -1,11 +1,18 @@
 import styles from '../../styles/components/Camera.module.css';
 import useWebSocket from 'react-use-websocket';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Camera(){
     const [imgUrl, setImgUrl] = useState(null);
+    const [protocolStr, setProtocolStr] = useState("ws");
+	
+    useEffect(() => {
+        if (location.protocol === 'https:') {
+            setProtocolStr("wss");
+        }
+    },[])
 
-    const { lastJsonMessage, sendMessage } = useWebSocket('ws://camera-esp32.herokuapp.com/jpgstream_client', {
+    const { lastJsonMessage, sendMessage } = useWebSocket(protocolStr+'://' +'camera-esp32.herokuapp.com/jpgstream_client', {
         onOpen: () => console.log(`Connected to App WS`),
         onMessage: (message) => {
             var url = URL.createObjectURL(message.data);
