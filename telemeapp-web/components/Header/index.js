@@ -1,6 +1,13 @@
 import styles from '../../styles/components/Header.module.css';
+import { GlobalContext } from '../../context/GlobalContext';
+import { useContext } from 'react';
 
 export function Header(){
+    const {
+        voltaAtual,
+        voltasTotais
+    } = useContext(GlobalContext);
+
     return(
         <div className={styles.container}>
             <img 
@@ -16,7 +23,7 @@ export function Header(){
                 className={styles.logoSol}
             />
 
-            <h2>Volta 2/5</h2>
+            <h2>Volta {voltaAtual}/{voltasTotais}</h2>
 
             <h2>00:10:45</h2>
         </div>

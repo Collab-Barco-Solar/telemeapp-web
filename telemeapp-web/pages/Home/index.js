@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import dynamic from "next/dynamic";
 import { Camera } from '../../components/Camera';
 import { CompleteGraph, MiniGraph } from '../../components/Graph';
@@ -7,6 +7,7 @@ import { Results } from '../../components/Results';
 import { Times } from '../../components/Times';
 import socket from '../../services/socketio';
 import styles from '../../styles/pages/Home.module.css';
+import { GlobalContext } from '../../context/GlobalContext';;
 
 const Map = dynamic(() => import("../../components/Map"), {
     ssr: false
@@ -27,12 +28,12 @@ export default function Home(){
     useEffect(() => {
         socket.on('info', (data) => {
             vectorData.push(data);
-            console.log(vectorData);
+            // console.log(vectorData);
             setInfo(data);
         }); 
         socket.on('allinfo', (data) => {
             vectorData = data;
-            console.log(data);
+            // console.log(data);
         });
     }, [])
 

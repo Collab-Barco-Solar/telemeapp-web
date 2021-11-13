@@ -1,6 +1,5 @@
 import styles from '../../styles/components/Graph.module.css';
 import { Line, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ResponsiveContainer, Label } from 'recharts'
-//import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Select from 'react-select';
 import { useEffect, useState } from 'react';
 

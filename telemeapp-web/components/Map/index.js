@@ -10,7 +10,8 @@ import { saveAs } from "file-saver";
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'
 import "leaflet-defaulticon-compatibility";
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '../../context/GlobalContext';
 
 let i = 0;
 let flags = [];
@@ -27,42 +28,6 @@ const FlagIcon = L.icon({
     iconSize: [30, 30], // size of the icon
 });
 
-
-
-// Função para adicionar uma bandeira no mapa
-async function addFlagCoords() {
-    const { value: formValues } = await Swal.fire({
-        title: `Coordenadas`,
-        html: `<div class="input-area"> 
-                    <div class="input-1">
-                        <p class="input-text">Latitude</p> 
-                        <input id="swal-input1" class="swal2-input" /> 
-                    </div>  
-                    <div class="input-2">
-                        <p class="input-text">Longitude </p> 
-                        <input id="swal-input2" class="swal2-input" /> 
-                    </div> 
-                </div>`,
-        focusConfirm: false,
-        width: 600,
-        padding: '3em',
-        background: '#fff',
-        preConfirm: () => {
-            return [
-                document.getElementById('swal-input1').value,
-                document.getElementById('swal-input2').value
-            ]
-        }
-    })
-
-    if (formValues) {
-        if (formValues[0] !== "" && formValues[1] !== "")
-            flags.push([formValues[0], formValues[1]]);
-
-        Swal.fire(JSON.stringify(formValues))
-    }
-}
-
 export default function Map(props) {
     const [posicaoAtual, setPosicaoAtual] = useState([-20.279682, -40.314660])
     const [addFlag, setAddFlag] = useState(false);
@@ -70,6 +35,11 @@ export default function Map(props) {
     const [numVoltaEspecifica, setNumVoltaEspecifica] = useState(-1);
     const [startRecording, setStartRecording] = useState(false)
     const [stopRecording, setStopRecording] = useState(false)
+
+    const {
+        bandeiras,
+        handleBandeiras
+    } = useContext(GlobalContext)
 
     function recordingRoute() {
         if (startRecording === true && stopRecording === false) {
@@ -109,11 +79,50 @@ export default function Map(props) {
                     return null;
                 }
                 flags.push([e.latlng.lat, e.latlng.lng]);
+                handleBandeiras(flags);
                 setAddFlag(!addFlag);
             },
         })
         return null;
     }
+
+
+    // Função para adicionar uma bandeira no mapa
+    async function addFlagCoords() {
+        const { value: formValues } = await Swal.fire({
+            title: `Coordenadas`,
+            html: `<div class="input-area"> 
+                    <div class="input-1">
+                        <p class="input-text">Latitude</p> 
+                        <input id="swal-input1" class="swal2-input" /> 
+                    </div>  
+                    <div class="input-2">
+                        <p class="input-text">Longitude </p> 
+                        <input id="swal-input2" class="swal2-input" /> 
+                    </div> 
+                </div>`,
+            focusConfirm: false,
+            width: 600,
+            padding: '3em',
+            background: '#fff',
+            preConfirm: () => {
+                return [
+                    document.getElementById('swal-input1').value,
+                    document.getElementById('swal-input2').value
+                ]
+            }
+        })
+
+        if (formValues) {
+            if (formValues[0] !== "" && formValues[1] !== "") {
+                flags.push([formValues[0], formValues[1]]);
+                handleBandeiras(flags);
+
+                Swal.fire(JSON.stringify(formValues))
+            }
+        }
+    }
+
 
     // Mostra a trilha atual do barco
     const BoatRoute = () => {
@@ -180,69 +189,72 @@ export default function Map(props) {
 
     return (
         <div className={styles.container} id="map-id" style={{ height: props.containerHeight }}>
-            { props.admin &&
-            <div className={styles.mapHeader}>
-                <div className={styles.addRoute}>
-                    {
-                        startRecording === true ?
-                            <FiStopCircle
-                                color="#FFFFFF"
-                                size={25}
-                                style={{ fill: 'red' }}
-                                onClick={() => setStopRecording(true)}
-                            /> :
-                            <FiPlayCircle
-                                color="#FFFFFF"
-                                size={25}
-                                style={{ fill: 'green' }}
-                                onClick={() => setStartRecording(true)}
-                            />
-                    }
+            {props.admin &&
+                <div className={styles.mapHeader}>
+                    <div className={styles.addRoute}>
+                        {
+                            startRecording === true ?
+                                <FiStopCircle
+                                    color="#FFFFFF"
+                                    size={25}
+                                    style={{ fill: 'red' }}
+                                    onClick={() => setStopRecording(true)}
+                                /> :
+                                <FiPlayCircle
+                                    color="#FFFFFF"
+                                    size={25}
+                                    style={{ fill: 'green' }}
+                                    onClick={() => setStartRecording(true)}
+                                />
+                        }
 
-                    <FiEye
-                        color="#FFFFFF"
-                        size={25}
-                        onClick={() => selectEspecificRoute()}
-                    />
-
-                    <div>
-                        <label htmlFor="arquivo">
-                            <FiUpload
-                                color="#FFFFFF"
-                                size={22}
-                                type="file"
-                            />
-                        </label>
-                        <input type="file" name="arquivo" id="arquivo" onChange={handleFileSelect} />
-                    </div>
-
-                    <FiDownload
-                        color="#FFFFFF"
-                        size={22}
-                        onClick={() => handleDownloadData()}
-                    />
-                </div>
-
-                <div className={styles.addFlags}>
-                    <FiPlus
-                        color="#FFFFFF"
-                        size={25}
-                        onClick={() => addFlagCoords()}
-                    />
-                    <FiFlag
-                        color="#FFFFFF"
-                        size={25}
-                        style={addFlag ? { fill: 'red' } : {}}
-                        onClick={() => setAddFlag(!addFlag)}
-                    />
-                    {flags.length > 0 &&
-                        <FiCornerUpLeft
+                        <FiEye
                             color="#FFFFFF"
                             size={25}
-                            onClick={() => flags.pop()}
-                        />}
-                </div>
-            </div>}
+                            onClick={() => selectEspecificRoute()}
+                        />
+
+                        <div>
+                            <label htmlFor="arquivo">
+                                <FiUpload
+                                    color="#FFFFFF"
+                                    size={22}
+                                    type="file"
+                                />
+                            </label>
+                            <input type="file" name="arquivo" id="arquivo" onChange={handleFileSelect} />
+                        </div>
+
+                        <FiDownload
+                            color="#FFFFFF"
+                            size={22}
+                            onClick={() => handleDownloadData()}
+                        />
+                    </div>
+
+                    <div className={styles.addFlags}>
+                        <FiPlus
+                            color="#FFFFFF"
+                            size={25}
+                            onClick={() => addFlagCoords()}
+                        />
+                        <FiFlag
+                            color="#FFFFFF"
+                            size={25}
+                            style={addFlag ? { fill: 'red' } : {}}
+                            onClick={() => setAddFlag(!addFlag)}
+                        />
+                        {bandeiras.length > 0 &&
+                            <FiCornerUpLeft
+                                color="#FFFFFF"
+                                size={25}
+                                onClick={() => {
+                                    flags.pop();
+                                    handleBandeiras(flags);
+                                }}
+                            />}
+                    </div>
+                </div>}
 
             <MapContainer
                 center={[-20.2769499, -40.3068654]}
@@ -260,7 +272,7 @@ export default function Map(props) {
                     </Popup>
                 </Marker>
 
-                {flags.map((position, idx) =>
+                {bandeiras.map((position, idx) =>
                     <Marker key={idx} position={position} icon={FlagIcon}></Marker>
                 )}
 

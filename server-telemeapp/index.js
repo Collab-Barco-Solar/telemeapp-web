@@ -12,6 +12,10 @@ let dados = '0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00000000,0.00000000,0.00'
 
 
 let vetorDados = []
+let temposVoltas = []
+let voltasTotais = 5
+let voltaAtual = 0
+let bandeiras = []
 
 
 function saveDataVector(data){
@@ -26,6 +30,9 @@ io.on("connection", socket => {
     console.log("USUARIO: " + socket.id);
 
     socket.emit("allinfo", vetorDados); // emite apenas para quem se conectou no momento
+    socket.emit("voltaAtual", voltaAtual);
+    socket.emit("voltasTotais", voltasTotais);
+    socket.emit("bandeiras", bandeiras);
     // console.log(vetorDados)
 
     socket.on("newinfo", (data) => {
@@ -51,6 +58,22 @@ io.on("connection", socket => {
         
         saveDataVector(dados)
         io.emit("info", dados); // emite para todos
+    })
+
+
+    socket.on("updateVoltaAtual", (volta) => {
+        voltaAtual = volta
+        io.emit("voltaAtual", voltaAtual)
+    })
+
+    socket.on("updateVoltasTotais", (volta) => {
+        voltasTotais = volta
+        io.emit("voltasTotais", voltasTotais)
+    })
+
+    socket.on("updateBandeiras", (bandeirasArray) => {
+        bandeiras = bandeirasArray
+        io.emit("bandeiras", bandeiras)
     })
 })
 
