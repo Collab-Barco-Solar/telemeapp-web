@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import dynamic from "next/dynamic";
 import { Camera } from '../../components/Camera';
-import { CompleteGraph, MiniGraph } from '../../components/Graph';
+//import { CompleteGraph, MiniGraph } from '../../components/Graph';
 import { Header } from '../../components/Header';
 import { Results } from '../../components/Results';
 import { Times } from '../../components/Times';
@@ -13,6 +13,17 @@ const Map = dynamic(() => import("../../components/Map"), {
     ssr: false
 })
 
+const CompleteGraph = dynamic(() => { 
+    return import("../../components/Graph");
+    },
+    { ssr: false }
+);
+
+const MiniGraph = dynamic(() => { 
+    return import("../../components/MiniGraph");
+    },
+    { ssr: false }
+);
 
 // humidity: arrayDados[5],
 // voltage_alimentation: arrayDados[6],
@@ -46,14 +57,19 @@ export default function Home(){
                     <Camera />
                 </div>
                 <div className={styles.meio}>
-                    <MiniGraph type="current_motor" color="#fff" data={vectorData}/>
-                    <MiniGraph type="current_alimentation" color="#CFF500" data={vectorData}/>
-                    <MiniGraph type="voltage_alimentation" color="#59F5E9" data={vectorData}/>
-                    <MiniGraph type="current_mppt" color="#00ff00" data={vectorData}/>
-                    <MiniGraph type="voltage_batteries" color="#59F5E9" data={vectorData}/>                    
-                    <MiniGraph type="speed" color="#E630E2" data={vectorData}/>
-                    <MiniGraph type="humidity" color="#59F5E9" data={vectorData}/>
-                    <MiniGraph type="temperature" color="#FF8405" data={vectorData}/>
+                    {//<MiniGraph type="current_motor" color="#fff" data={vectorData}/>
+                    // <MiniGraph type="current_alimentation" color="#CFF500" data={vectorData}/>
+                    // <MiniGraph type="voltage_alimentation" color="#59F5E9" data={vectorData}/>
+                    // <MiniGraph type="current_mppt" color="#00ff00" data={vectorData}/>
+                    // <MiniGraph type="voltage_batteries" color="#59F5E9" data={vectorData}/>                    
+                    // <MiniGraph type="speed" color="#E630E2" data={vectorData}/>
+                    // <MiniGraph type="humidity" color="#59F5E9" data={vectorData}/>
+                    // <MiniGraph type="temperature" color="#FF8405" data={vectorData}/>
+                    }
+                    
+                    
+                    
+                    
                 </div>
                 <div className={styles.fim}>
                     <CompleteGraph data={vectorData}/>

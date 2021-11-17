@@ -1,15 +1,15 @@
 import styles from '../../styles/components/Graph.module.css';
-import { Line, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ResponsiveContainer, Label } from 'recharts'
+import {ResponsiveContainer} from 'recharts'
 import Select from 'react-select';
+
+import { Line, defaults, Chart } from 'react-chartjs-2';
+import zoomPlugin from 'chartjs-plugin-zoom';
+
 import { useEffect, useState } from 'react';
 
 
-
-// Configurações estéticas do gráfico
-let fontAxis = 'Arial';
-let fontLabel = 'Arial';
-let fontSizeAxis = '1rem';
-let fontSizeLabel = '1.2rem';
+// Disable animating charts by default.
+//defaults.animation = false;
 
 
 // Configurações do conteúdo do gráfico
@@ -24,7 +24,6 @@ var InfoNames = [
     { value: "temperature", label: "Temperatura" }
 ];
 var colors = ['white', 'yellow', 'grey', 'blue', 'red'];
-
 
 const stylesSelect = {
     option: (provided, state) => ({
@@ -46,32 +45,68 @@ const stylesSelect = {
     }),
 };
 
+const chart_options = {
+    animation: false,
+    responsive: false,
+    borderWidth: 1,
+    lineWidth: 0.6,
+    elements: {
+        point:{
+            radius: 0.1,
+            hitRadius: 0
+        }
+    },
+    plugins: {
+        zoom: {
+            animation: {
+                duration: 0
+            },
+            zoom: {
+                wheel: {
+                enabled: true,
+                },
+                pinch: {
+                enabled: true
+                },
+                mode: 'xy',
+            }
+        }
+      },
+    maintainAspectRatio: false
+};
 
-
-
-
-export function CompleteGraph(props) {
+export default function CompleteGraph(props) {
     const [dadosExibidos, setDadosExibidos] = useState(["current_motor"]);
-    
     var dadosRecebidos = props.data;
+
+    //Adds zoom option to the charts
+    useEffect(function mount(){
+        Chart.register(zoomPlugin);
+    });
 
     // Pega os valores selecionados no Select e coloca no state
     const handleChangeSelect = (selectedOptions) => {
         setDadosExibidos(selectedOptions?.map(o => o.value));
     }
 
-    // Pega o Array completo retirado do banco de dados e extrai a informação a ser exibida no gráfico
-    const organizarDadosParaGrafico = (linhaAtual) => {
-        var dict = [];
-        dadosExibidos?.forEach(dado => { //Pega cada dado a ser exibido e organiza num dictionary no formato {nomeDoDado: valorDoDado_nessaLinha}
-            dict[dado] = linhaAtual[dado];
-            // !!! Mudar o tempo para o tempo de fato
-            dict['tempo'] = linhaAtual['time'];
-        });
-
-        return dict;
+    const CriaDataset = (dadoASerExibido, index) => {
+        var dataset = {
+            label: dadoASerExibido,
+            backgroundColor: colors[index],
+            borderColor: colors[index],
+            data: dadosRecebidos.map(function (line) {
+                return line[dadoASerExibido]
+            }),
+        }
+        return dataset;
     }
-
+    
+    const data = {
+        datasets: dadosExibidos?.map(CriaDataset),
+        labels: dadosRecebidos?.map(function (line) {
+            return line['time']
+        })
+    };
 
     return (
         <div className={styles.container}>
@@ -95,85 +130,9 @@ export function CompleteGraph(props) {
                 />
             </ResponsiveContainer>
             <ResponsiveContainer width="95%" height="80%" className={styles.graph}>
-                <LineChart
-                    margin={{ top: 0, left: 0, right: 0, bottom: 0 }}
-                    data={dadosRecebidos?.map(organizarDadosParaGrafico)} >
-                    <CartesianGrid verticalFill={['rgba(28, 28, 73, 1)']} horizontalFill={['#ccc', '#fff']} />
-                    <Tooltip contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0)' }} />
-                    <XAxis dataKey="tempo" stroke='white' minTickGap={50} interval="preserveStartEnd" style={{
-                        fontSize: fontSizeAxis,
-                        fontFamily: fontAxis,
-                    }}>
-                    </XAxis>
-                    <YAxis stroke='white' style={{
-                        fontSize: fontSizeAxis,
-                        fontFamily: fontAxis,
-                    }}>
-                    </YAxis>
-                    <Legend />
-
-                    {dadosExibidos?.map((item, index) => {
-                        //Passa por todos os dados a serem exibidos e cria uma linha no gráfico para ele, com a próxima cor do array colors
-                        return (
-                            <Line type='monotone' dataKey={dadosExibidos[index]} key={index} stroke={colors[index]} dot={false} isAnimationActive={false} />
-                        );
-                    })}
-                </LineChart>
+                <Line data={data} options={chart_options}/>
             </ResponsiveContainer>
         </div>
     )
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-export function MiniGraph(props) {
-    const dadosExibidos = [props.type];
-    var dadosRecebidos = props.data
-
-    // Pega o Array completo retirado do banco de dados e extrai a informação a ser exibida no gráfico
-    const organizarDadosParaMiniGrafico = (linhaAtual) => {
-        var dict = [];
-        dadosExibidos?.forEach(dado => { //Pega cada dado a ser exibido e organiza num dictionary no formato {nomeDoDado: valorDoDado_nessaLinha}
-            dict[dado] = linhaAtual[dado];
-            // !!! Mudar o tempo para o tempo de fato
-            dict['tempo'] = linhaAtual['time'];
-        });
-
-        return dict;
-    }
-
-    return (
-        <div className={styles.miniGraph}>
-            <ResponsiveContainer width="100%" height="95%">
-                <LineChart
-                    margin={{ top: 0, left: 0, right: 0, bottom: 0 }}
-                    data={dadosRecebidos?.map(organizarDadosParaMiniGrafico)} >
-                    <CartesianGrid verticalFill={['rgba(28, 28, 73, 1)']} horizontalFill={['#ccc', '#fff']} />
-                    <Tooltip contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0)' }} />
-                    <XAxis dataKey="tempo" stroke='white' minTickGap={50} interval="preserveStartEnd" style={{
-                        fontSize: fontSizeAxis,
-                        fontFamily: fontAxis,
-                    }}>
-                    </XAxis>
-                    <YAxis stroke='white' style={{
-                        fontSize: fontSizeAxis,
-                        fontFamily: fontAxis,
-                    }}>
-                    </YAxis>
-                    <Legend />
-                    <Line type='monotone' dataKey={props.type} stroke={props.color} dot={false} isAnimationActive={false} />
-                </LineChart>
-            </ResponsiveContainer>
-        </div>
-    )
-}
