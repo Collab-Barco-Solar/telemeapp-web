@@ -5,7 +5,8 @@ import { useContext } from 'react';
 export function Header(){
     const {
         voltaAtual,
-        voltasTotais
+        voltasTotais,
+        tempo
     } = useContext(GlobalContext);
 
     return(
@@ -25,7 +26,7 @@ export function Header(){
 
             <h2>Volta {voltaAtual}/{voltasTotais}</h2>
 
-            <h2>00:10:45</h2>
+            <h2>{tempo}</h2>
         </div>
     )
 }

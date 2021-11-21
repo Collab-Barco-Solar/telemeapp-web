@@ -131,7 +131,7 @@ void loop() {
     webSocket.loop();
     uint64_t now = millis();
 
-    if(now - messageTimestamp > 30) {
+    if(now - messageTimestamp > 15) {
         messageTimestamp = now;
 
         camera_fb_t * fb = NULL;

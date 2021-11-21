@@ -13,7 +13,11 @@ const Map = dynamic(() => import("../../components/Map"), {
 export default function Admin(){
     const {
         handleVoltaAtual,
-        handleVoltasTotais
+        handleVoltasTotais,
+        iniciarTempo,
+        pausarTempo,
+        pararTempo,
+        statusTempo,
     } = useContext(GlobalContext)
 
     function configuration(){
@@ -52,7 +56,16 @@ export default function Admin(){
             <div className={styles.control}>
                 <div className={styles.singleControl}>
                     <h1>Relógio</h1>
-                    <FiPlay size={50} color="#FFF" className={styles.icon} />
+                    <div className={styles.singleControlIcons}>
+                        { statusTempo?
+                            <div>
+                                <FiPause size={50} color="#FFF" className={styles.icon} onClick={() => pausarTempo() }/>
+                                <FiSquare size={50} color="#FFF" className={styles.icon} onClick={() => pararTempo()}/>
+                            </div>
+                            :
+                            <FiPlay size={50} color="#FFF" className={styles.icon} onClick={() => iniciarTempo()} />
+                        }
+                    </div>
                 </div>   
                 <div className={styles.singleControl}>
                     <h1>Volta</h1>

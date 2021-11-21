@@ -16,7 +16,13 @@ let temposVoltas = []
 let voltasTotais = 5
 let voltaAtual = 0
 let bandeiras = []
+let tempo = 0
+let statusTempo = false
 
+
+function resetarTempo(){
+    tempo = 0;
+}
 
 function saveDataVector(data){
     if(vetorDados.length > 20000){
@@ -24,6 +30,13 @@ function saveDataVector(data){
     }
     vetorDados.push(data)
 }
+
+setInterval(function(){ 
+    if(statusTempo){
+        tempo += 1
+        io.emit("tempo", tempo)
+    }
+}, 1000);
 
 
 io.on("connection", socket => {
@@ -33,6 +46,8 @@ io.on("connection", socket => {
     socket.emit("voltaAtual", voltaAtual);
     socket.emit("voltasTotais", voltasTotais);
     socket.emit("bandeiras", bandeiras);
+    socket.emit("tempo", tempo);
+    socket.emit("statusTempo", statusTempo);
     // console.log(vetorDados)
 
     socket.on("newinfo", (data) => {
@@ -75,5 +90,25 @@ io.on("connection", socket => {
         bandeiras = bandeirasArray
         io.emit("bandeiras", bandeiras)
     })
+
+    socket.on("iniciarTempo", () => {
+        statusTempo = true
+        io.emit("statusTempo", statusTempo)
+    })
+
+    socket.on("pausarTempo", () => {
+        statusTempo = false
+        io.emit("statusTempo", statusTempo)
+    })
+
+    socket.on("pararTempo", () => {
+        tempo = 0
+        statusTempo = false
+        io.emit("tempo", tempo)
+        io.emit("statusTempo", statusTempo)
+    })
+
+    
+
 })
 
