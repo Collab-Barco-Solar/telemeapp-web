@@ -18,6 +18,7 @@ export default function Admin(){
         pausarTempo,
         pararTempo,
         statusTempo,
+        baixarDados,
     } = useContext(GlobalContext)
 
     function configuration(){
@@ -76,7 +77,7 @@ export default function Admin(){
                 </div>
                 <div className={styles.singleControl}>
                     <h1>Baixar Dados</h1>
-                    <FiDownload size={50} color="#FFF" className={styles.icon} />
+                    <FiDownload size={50} color="#FFF" className={styles.icon} onClick={() => baixarDados()} />
                 </div> 
 
                 <div className={styles.singleControl}>

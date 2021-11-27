@@ -7,7 +7,7 @@ import { Results } from '../../components/Results';
 import { Times } from '../../components/Times';
 import socket from '../../services/socketio';
 import styles from '../../styles/pages/Home.module.css';
-import { GlobalContext } from '../../context/GlobalContext';;
+import { GlobalContext } from '../../context/GlobalContext';
 
 const Map = dynamic(() => import("../../components/Map"), {
     ssr: false
@@ -20,22 +20,25 @@ const Map = dynamic(() => import("../../components/Map"), {
 // long: arrayDados[8],
 // speed: arrayDados[9]
 
-let vectorData = []
+// let vectorData = []
 
 export default function Home(){
-    const [info, setInfo] = useState({});
+    const {
+        vectorData
+    } = useContext(GlobalContext)
+    // const [info, setInfo] = useState({});
 
-    useEffect(() => {
-        socket.on('info', (data) => {
-            vectorData.push(data);
-            // console.log(vectorData);
-            setInfo(data);
-        }); 
-        socket.on('allinfo', (data) => {
-            vectorData = data;
-            // console.log(data);
-        });
-    }, [])
+    // useEffect(() => {
+    //     socket.on('info', (data) => {
+    //         vectorData.push(data);
+    //         // console.log(vectorData);
+    //         setInfo(data);
+    //     }); 
+    //     socket.on('allinfo', (data) => {
+    //         vectorData = data;
+    //         // console.log(data);
+    //     });
+    // }, [])
 
     return(
         <>
