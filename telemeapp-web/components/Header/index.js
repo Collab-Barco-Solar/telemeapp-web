@@ -6,7 +6,8 @@ export function Header(){
     const {
         voltaAtual,
         voltasTotais,
-        tempo
+        tempo,
+        formatNumber,
     } = useContext(GlobalContext);
 
     return(
@@ -26,7 +27,7 @@ export function Header(){
 
             <h2>Volta {voltaAtual}/{voltasTotais}</h2>
 
-            <h2>{tempo}</h2>
+            <h2>{formatNumber(tempo)}</h2>
         </div>
     )
 }

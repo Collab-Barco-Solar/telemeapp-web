@@ -13,12 +13,14 @@ const Map = dynamic(() => import("../../components/Map"), {
 export default function Admin(){
     const {
         handleVoltaAtual,
-        handleVoltasTotais,
         iniciarTempo,
         pausarTempo,
         pararTempo,
         statusTempo,
         baixarDados,
+        voltasTotais,
+        distanciaTotal,
+        handleInputsConfig,
     } = useContext(GlobalContext)
 
     function configuration(){
@@ -26,20 +28,23 @@ export default function Admin(){
             title: 'Configurações',
             html:
                 '<div class="swal2-content-custom">' +
-                    '<h2>Voltas totais</h2>'+
                     '<div class="swal2-input-container">' +
-                        '<input id="swal-input1" class="swal2-input" autofocus>' +
+                        '<label>Voltas totais: </label>'+
+                        `<input id="swal-input1" value=${voltasTotais}  class="swal2-input" autofocus>` +
+                        '<label>Distância (mi):</label>'+
+                        `<input id="swal-input2" value=${distanciaTotal} class="swal2-input" autofocus>` +
                     '</div>'+
                 '</div>',
             focusConfirm: false,
             preConfirm: () => {
                 return [
-                    document.getElementById('swal-input1').value
+                    document.getElementById('swal-input1').value,
+                    document.getElementById('swal-input2').value
                 ]
             }
         }).then((result) => {
             if (result.value) {
-                handleVoltasTotais(result.value[0])
+                handleInputsConfig(result.value[0], result.value[1])
                 Swal.fire(
                     'Configurações salvas!',
                     '',

@@ -4,7 +4,8 @@ import styles from '../../styles/components/Times.module.css';
 
 export function Times(props) {
   const {
-    temposVoltas
+    temposVoltas,
+    formatNumber
   } = useContext(GlobalContext)
 
   return (
@@ -13,7 +14,10 @@ export function Times(props) {
 
       <div className={styles.times}>
         { temposVoltas.map((tempo, index) => (
-          <p key={index}> {index + 1} - {tempo}</p>
+          index == 0 ? 
+          <p key={index}> {index + 1} - {formatNumber(tempo)}</p>
+          :
+          <p key={index}> {index + 1} - {formatNumber(tempo - temposVoltas[index - 1])}</p>
         )) }
       </div>
     </div>
