@@ -14,6 +14,7 @@ let dados = '0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00000000,0.00000000,0.00'
 let vetorDados = []
 let temposVoltas = []
 let voltasTotais = 5
+let distanciaTotal = 0
 let voltaAtual = 0
 let bandeiras = []
 let tempo = 0
@@ -48,6 +49,8 @@ io.on("connection", socket => {
     socket.emit("bandeiras", bandeiras);
     socket.emit("tempo", tempo);
     socket.emit("statusTempo", statusTempo);
+    socket.emit("temposVoltas", temposVoltas);
+    socket.emit("distanciaTotal", distanciaTotal)
     // console.log(vetorDados)
 
     socket.on("newinfo", (data) => {
@@ -86,6 +89,12 @@ io.on("connection", socket => {
         io.emit("voltasTotais", voltasTotais)
     })
 
+    socket.on("updateDistanciaTotal", (distancia) => {
+        distanciaTotal = distancia
+        io.emit("distanciaTotal", distanciaTotal)
+        // console.log(distanciaTotal)
+    })
+
     socket.on("updateBandeiras", (bandeirasArray) => {
         bandeiras = bandeirasArray
         io.emit("bandeiras", bandeiras)
@@ -108,7 +117,20 @@ io.on("connection", socket => {
         io.emit("statusTempo", statusTempo)
     })
 
+    socket.on("adicionarTempoVolta", (tempo) => {
+        temposVoltas.push(tempo)
+        io.emit("temposVoltas", temposVoltas)
+    })
+
+    socket.on("removerTempoVolta", () => {
+        temposVoltas.pop()
+        io.emit("temposVoltas", temposVoltas)
+    })
     
+    socket.on("resetarTemposVoltas", () => {
+        temposVoltas = []
+        io.emit("temposVoltas", temposVoltas)
+    })
 
 })
 
