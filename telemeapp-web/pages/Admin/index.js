@@ -5,6 +5,7 @@ import styles from '../../styles/pages/Admin.module.css';
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import Swal from 'sweetalert2'
+import { useSession, signIn, signOut } from "next-auth/client"
 
 const Map = dynamic(() => import("../../components/Map"), {
     ssr: false
@@ -22,6 +23,8 @@ export default function Admin(){
         distanciaTotal,
         handleInputsConfig,
     } = useContext(GlobalContext)
+
+    const [session] = useSession();
 
     function configuration(){
         Swal.fire({
@@ -55,43 +58,62 @@ export default function Admin(){
         )
     }
 
-    return(
-        <div className={styles.container}>
-            <Header />
-
-            <div className={styles.control}>
-                <div className={styles.singleControl}>
-                    <h1>Relógio</h1>
-                    <div className={styles.singleControlIcons}>
-                        { statusTempo?
-                            <div>
-                                <FiPause size={50} color="#FFF" className={styles.icon} onClick={() => pausarTempo() }/>
-                                <FiSquare size={50} color="#FFF" className={styles.icon} onClick={() => pararTempo()}/>
-                            </div>
-                            :
-                            <FiPlay size={50} color="#FFF" className={styles.icon} onClick={() => iniciarTempo()} />
-                        }
+    if(session){
+        console.log(session)
+        return(
+            <div className={styles.container}>
+                <Header />
+                <button onClick={signOut}>Logout</button>
+                <div className={styles.control}>
+                    <div className={styles.singleControl}>
+                        <h1>Relógio</h1>
+                        <div className={styles.singleControlIcons}>
+                            { statusTempo?
+                                <div>
+                                    <FiPause size={50} color="#FFF" className={styles.icon} onClick={() => pausarTempo() }/>
+                                    <FiSquare size={50} color="#FFF" className={styles.icon} onClick={() => pararTempo()}/>
+                                </div>
+                                :
+                                <FiPlay size={50} color="#FFF" className={styles.icon} onClick={() => iniciarTempo()} />
+                            }
+                        </div>
+                    </div>   
+                    <div className={styles.singleControl}>
+                        <h1>Volta</h1>
+                        <div className={styles.singleControlIcons}>
+                            <FiPlus size={50} color="#FFF" className={styles.icon} onClick={() => handleVoltaAtual('plus')} />
+                            <FiMinus size={50} color="#FFF" className={styles.icon} onClick={() => handleVoltaAtual('')}/>    
+                        </div>
                     </div>
-                </div>   
-                <div className={styles.singleControl}>
-                    <h1>Volta</h1>
-                    <div className={styles.singleControlIcons}>
-                        <FiPlus size={50} color="#FFF" className={styles.icon} onClick={() => handleVoltaAtual('plus')} />
-                        <FiMinus size={50} color="#FFF" className={styles.icon} onClick={() => handleVoltaAtual('')}/>    
-                    </div>
+                    <div className={styles.singleControl}>
+                        <h1>Baixar Dados</h1>
+                        <FiDownload size={50} color="#FFF" className={styles.icon} onClick={() => baixarDados()} />
+                    </div> 
+    
+                    <div className={styles.singleControl}>
+                        <h1>Config.</h1>
+                        <FiSettings size={50} color="#FFF" className={styles.icon} onClick={() => configuration()} />
+                    </div> 
                 </div>
-                <div className={styles.singleControl}>
-                    <h1>Baixar Dados</h1>
-                    <FiDownload size={50} color="#FFF" className={styles.icon} onClick={() => baixarDados()} />
-                </div> 
-
-                <div className={styles.singleControl}>
-                    <h1>Config.</h1>
-                    <FiSettings size={50} color="#FFF" className={styles.icon} onClick={() => configuration()} />
-                </div> 
+                
+                <Map admin={true} containerHeight={600} mapHeight="95%"/>
             </div>
-            
-            <Map admin={true} containerHeight={600} mapHeight="95%"/>
-        </div>
-    )
+        )
+    }
+    else{
+        return (
+            <div className={styles.containerButton}>
+                <div className={styles.buttonLogin} onClick={() => signIn('google')}>
+                    <img 
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png"
+                        alt="Google Logo"
+                        height="30px"
+                    />
+                    Entrar com o Google
+                </div>
+            </div>
+        )
+    }
+
+    
 }
