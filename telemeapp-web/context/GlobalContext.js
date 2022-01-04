@@ -4,6 +4,8 @@ import { saveAs } from "file-saver";
 
 export const GlobalContext = createContext({});
 
+let vectorData = [];
+
 export function InfoProvider({ children }) {
 
   const [voltaAtual, setVoltaAtual] = useState(0);
@@ -12,7 +14,7 @@ export function InfoProvider({ children }) {
   const [tempo, setTempo] = useState(0);
   const [statusTempo, setStatusTempo] = useState(false);
   const [temposVoltas, setTemposVoltas] = useState([]);
-  const [vectorData, setVectorData] = useState([]);
+  // const [vectorData, setVectorData] = useState([]);
   const [distanciaTotal, setDistanciaTotal] = useState(0);
 
   // Estimativas
@@ -42,13 +44,16 @@ export function InfoProvider({ children }) {
     })
 
     socket.on('info', (data) => {
-      let newVectorData = vectorData;
-      newVectorData.push(data);
-      setVectorData(newVectorData);
+      // let newVectorData = vectorData;
+      // newVectorData.push(data);
+      // setVectorData(newVectorData);
+      vectorData.push(data);
+      // console.log(vectorData);
     }); 
 
     socket.on('allinfo', (data) => {
-      setVectorData(data);
+      // setVectorData(data);
+      vectorData = data;
     });
 
     socket.on('tempo', (tempo) => {
