@@ -46,7 +46,7 @@ const stylesSelect = {
 };
 
 const chart_options = {
-    // animation: true,
+    animation: false,
     // responsive: false,
     borderWidth: 1,
     lineWidth: 0.6,
