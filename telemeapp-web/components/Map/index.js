@@ -1,5 +1,5 @@
 import styles from '../../styles/components/Map.module.css';
-import { TileLayer, MapContainer, Marker, Popup, useMapEvents, Polyline } from 'react-leaflet';
+import { TileLayer, MapContainer, Marker, Popup, useMapEvents, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { FiCornerUpLeft, FiFlag, FiPlus, FiEye, FiPlayCircle, FiStopCircle, FiUpload, FiDownload } from "react-icons/fi";
 import Swal from 'sweetalert2'
@@ -28,6 +28,7 @@ const FlagIcon = L.icon({
     iconSize: [30, 30], // size of the icon
 });
 
+
 export default function Map(props) {
     const [posicaoAtual, setPosicaoAtual] = useState([-20.279682, -40.314660])
     const [addFlag, setAddFlag] = useState(false);
@@ -38,12 +39,14 @@ export default function Map(props) {
 
     const {
         bandeiras,
-        handleBandeiras
+        handleBandeiras,
+        gps
     } = useContext(GlobalContext)
 
     function recordingRoute() {
         if (startRecording === true && stopRecording === false) {
-            voltaAtual.push(positions[i]);
+            // voltaAtual.push(positions[i]);
+            voltaAtual.push(posicaoAtual);
         }
         else if (startRecording === true && stopRecording === true) {
             voltas.push(voltaAtual);
@@ -62,15 +65,21 @@ export default function Map(props) {
     //                posicaoAtual, usando o setPosicaoAtual. Se for usar o banco de dados real, substituir apenas
     //                a lógica desse useEffect.
     useEffect(() => {
-        setTimeout(() => {
-            if (i === 30) {
-                i = 0;
-            }
-            recordingRoute();
-            setPosicaoAtual(positions[i]);
-            i++;
-        }, 1000)
-    }, [posicaoAtual])
+        // setTimeout(() => {
+        //     if (i === 30) {
+        //         i = 0;
+        //     }
+        //     recordingRoute();
+        //     setPosicaoAtual(positions[i]);
+        //     i++;
+        // }, 1000)
+
+        let posicao_atual = [gps.latitude, gps.longitude];
+        
+        recordingRoute();
+        setPosicaoAtual(posicao_atual);
+    
+    }, [gps])
 
     const Markers = () => {
         useMapEvents({
@@ -187,6 +196,13 @@ export default function Map(props) {
         setNumVoltas(finalObj.length);
     }
 
+    function CenterTheMapOnMakerChange({ coords }) {
+        const map = useMap();
+        map.setView(coords, map.getZoom());
+      
+        return null;
+    }
+
     return (
         <div className={styles.container} id="map-id" style={{ height: props.containerHeight }}>
             {props.admin &&
@@ -257,10 +273,9 @@ export default function Map(props) {
                 </div>}
 
             <MapContainer
-                center={[-20.2769499, -40.3068654]}
+                center={posicaoAtual}
                 zoom={15}
                 style={{ width: '100%', height: props.mapHeight }}
-
             >
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -268,7 +283,7 @@ export default function Map(props) {
                 />
                 <Marker position={posicaoAtual} icon={BoatIcon}>
                     <Popup>
-                        Poente - Solares <br /> Última atualização: 07:30
+                        Poente - Solares <br /> Última atualização: {gps?.time}
                     </Popup>
                 </Marker>
 
@@ -277,6 +292,8 @@ export default function Map(props) {
                 )}
 
                 <Markers />
+
+                <CenterTheMapOnMakerChange coords={posicaoAtual} />
 
                 {startRecording === true && <BoatRoute />}
 

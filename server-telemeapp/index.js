@@ -10,9 +10,9 @@ let dados = '0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00000000,0.00000000,0.00'
 
 //String(current_mppt) + "," + String(current_alimentation) + "," + String(voltage_batteries) + "," + String(current_motor) + "," + String(temperature) + "," + String(humidity) + "," + String(voltage_alimentation) + "," + gps;
 
-
 let vetorDados = []
 let temposVoltas = []
+let vetorGps = []
 let voltasTotais = 5
 let distanciaTotal = 0
 let voltaAtual = 0
@@ -51,6 +51,7 @@ io.on("connection", socket => {
     socket.emit("statusTempo", statusTempo);
     socket.emit("temposVoltas", temposVoltas);
     socket.emit("distanciaTotal", distanciaTotal)
+    socket.emit("gps", vetorGps)
     // console.log(vetorDados)
 
     socket.on("newinfo", (data) => {
@@ -130,6 +131,45 @@ io.on("connection", socket => {
     socket.on("resetarTemposVoltas", () => {
         temposVoltas = []
         io.emit("temposVoltas", temposVoltas)
+    })
+
+    socket.on("updateGps", (gps) => {
+        // vetorGps.push(gps)
+        // add the current time in Brazil formated in HH:MM:SS
+        let date_ob = new Date()
+        let time = date_ob.toLocaleString('en-GB',  { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute:'2-digit', second:'2-digit'})
+        let gpsAtual = {
+            ...gps,
+            time: time
+        }
+        // console.log(gpsAtual)
+        io.emit("gpsAtual", gpsAtual)
+    })
+
+    socket.on("resetarGps", () => {
+        vetorGps = []
+        io.emit("gpsAtual", vetorGps)
+    })
+
+    socket.on("resetarTudo", () => {
+        vetorDados = []
+        temposVoltas = []
+        vetorGps = []
+        voltasTotais = 5
+        distanciaTotal = 0
+        voltaAtual = 0
+        bandeiras = []
+        tempo = 0
+        statusTempo = false
+        io.emit("allinfo", vetorDados); // emite apenas para quem se conectou no momento
+        io.emit("voltaAtual", voltaAtual);
+        io.emit("voltasTotais", voltasTotais);
+        io.emit("bandeiras", bandeiras);
+        io.emit("tempo", tempo);
+        io.emit("statusTempo", statusTempo);
+        io.emit("temposVoltas", temposVoltas);
+        io.emit("distanciaTotal", distanciaTotal)
+        io.emit("gps", vetorGps)
     })
 
 })

@@ -21,6 +21,13 @@ export function InfoProvider({ children }) {
   const [tempoRestanteVolta, setTempoRestanteVolta] = useState('');
   const [tempoRestanteCorrida, setTempoRestanteCorrida] = useState('');
   const [velocidadeMedia, setVelocidadeMedia] = useState(0);
+
+  const [gps, setGps] = useState({
+    latitude: -20.280080,
+    longitude: -40.313748,
+    speed: 0,
+    time: 0,
+  });
   
 
   // Esse useEffect carrega as funcoes de socket e atualiza os dados quando chega uma nova mensagem
@@ -62,6 +69,11 @@ export function InfoProvider({ children }) {
 
     socket.on('distanciaTotal', (distanciaTotal) => {
       setDistanciaTotal(distanciaTotal);
+    });
+
+    socket.on('gpsAtual', (coords) => {
+      console.log(coords);
+      setGps(coords);
     });
 
   }, [])
@@ -216,6 +228,7 @@ export function InfoProvider({ children }) {
         temposVoltas,
         vectorData,
         distanciaTotal,
+        gps,
         handleVoltaAtual,
         handleVoltasTotais,
         handleBandeiras,
