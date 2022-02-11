@@ -23,31 +23,18 @@ const MiniGraph = dynamic(() => import("../../components/MiniGraph"), {
 );
 
 
-// humidity: arrayDados[5],
-// voltage_alimentation: arrayDados[6],
-// lat: arrayDados[7],
-// long: arrayDados[8],
-// speed: arrayDados[9]
-
 let vectorData = []
 let vectorDataMini = []
 
 export default function Home(){
-    // const {
-    //     vectorData
-    // } = useContext(GlobalContext)
-
-    // useEffect(() => {
-    //     console.log(vectorData)
-    // }, [vectorData])
+    
 
     const [info, setInfo] = useState({});
 
     useEffect(() => {
         socket.on('info', (data) => {
             vectorData.push(data);
-            // console.log(vectorData);
-            // get the last 1000 positions of vactorData and save in vectorDataMini
+            //pega as ultimas 1000 posições do vectorData e salva no vectorDataMini
             if(vectorData.length > 1000){
                 vectorDataMini = vectorData.slice(vectorData.length - 1000, vectorData.length)
             }
@@ -59,7 +46,6 @@ export default function Home(){
         }); 
         socket.on('allinfo', (data) => {
             vectorData = data;
-            // console.log(data);
         });
     }, [])
 

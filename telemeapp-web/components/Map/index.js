@@ -45,7 +45,6 @@ export default function Map(props) {
 
     function recordingRoute() {
         if (startRecording === true && stopRecording === false) {
-            // voltaAtual.push(positions[i]);
             voltaAtual.push(posicaoAtual);
         }
         else if (startRecording === true && stopRecording === true) {
@@ -65,14 +64,6 @@ export default function Map(props) {
     //                posicaoAtual, usando o setPosicaoAtual. Se for usar o banco de dados real, substituir apenas
     //                a lógica desse useEffect.
     useEffect(() => {
-        // setTimeout(() => {
-        //     if (i === 30) {
-        //         i = 0;
-        //     }
-        //     recordingRoute();
-        //     setPosicaoAtual(positions[i]);
-        //     i++;
-        // }, 1000)
 
         let posicao_atual = [gps.latitude, gps.longitude];
         
@@ -191,7 +182,6 @@ export default function Map(props) {
     function handleFileLoad(event) {
         const result = event.target.result
         const finalObj = JSON.parse(result);
-        // console.log(finalObj);
         voltas = finalObj;
         setNumVoltas(finalObj.length);
     }

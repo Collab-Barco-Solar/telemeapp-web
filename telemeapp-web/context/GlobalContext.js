@@ -10,12 +10,21 @@ export function InfoProvider({ children }) {
 
   const [voltaAtual, setVoltaAtual] = useState(0);
   const [voltasTotais, setVoltasTotais] = useState(0);
-  const [bandeiras, setBandeiras] = useState([]);
-  const [tempo, setTempo] = useState(0);
-  const [statusTempo, setStatusTempo] = useState(false);
-  const [temposVoltas, setTemposVoltas] = useState([]);
-  // const [vectorData, setVectorData] = useState([]);
+
+  //distância total da prova em milhas náuticas
   const [distanciaTotal, setDistanciaTotal] = useState(0);
+
+  //bandeiras no mapa
+  const [bandeiras, setBandeiras] = useState([]);
+
+  //cronômetro geral exibido no header
+  const [tempo, setTempo] = useState(0);
+
+  //verifica se o cronômetro está pausado ou não
+  const [statusTempo, setStatusTempo] = useState(false);
+  
+  //vetor de tempos de voltas... cada posição representa uma volta
+  const [temposVoltas, setTemposVoltas] = useState([]);
 
   // Estimativas
   const [tempoRestanteVolta, setTempoRestanteVolta] = useState('');
@@ -51,15 +60,10 @@ export function InfoProvider({ children }) {
     })
 
     socket.on('info', (data) => {
-      // let newVectorData = vectorData;
-      // newVectorData.push(data);
-      // setVectorData(newVectorData);
       vectorData.push(data);
-      // console.log(vectorData);
     }); 
 
     socket.on('allinfo', (data) => {
-      // setVectorData(data);
       vectorData = data;
     });
 
@@ -78,6 +82,7 @@ export function InfoProvider({ children }) {
 
   }, [])
 
+  //adiciona mais uma volta
   function handleVoltaAtual(type) {
     let volta = 0;
     if (type === 'plus') {
@@ -97,6 +102,7 @@ export function InfoProvider({ children }) {
     }
   }
 
+  //altera voltas totais
   function handleVoltasTotais(qtd) {
     setVoltasTotais(qtd);
     socket.emit('updateVoltaAtual', 0);
@@ -109,7 +115,9 @@ export function InfoProvider({ children }) {
     socket.emit('updateBandeiras', bandeiras);
   }
 
-
+/*
+*        Cálculo das Estimativas
+*/
   function calculaTempoRestanteVolta(tempo){
     //Encontra velocidade média em nós
     let velocidade = calculaVelocidadeMedia(tempo);    
@@ -153,16 +161,14 @@ export function InfoProvider({ children }) {
       //retorna velocidade media (GPS)
       return 0;
     }
-    //else
+
     //Calcula a velocidade média baseada nas últimas voltas
     let velocidadeMedia = 0;
 
     let distanciaPercorrida = (distanciaTotal/voltasTotais)*voltaAtual;
-    // console.log(temposVoltas);
-    
-    velocidadeMedia = distanciaPercorrida / temposVoltas[temposVoltas.length-1];
-    // console.log(distanciaTotal);
 
+    velocidadeMedia = distanciaPercorrida / temposVoltas[temposVoltas.length-1];
+  
     return velocidadeMedia;
   }
 

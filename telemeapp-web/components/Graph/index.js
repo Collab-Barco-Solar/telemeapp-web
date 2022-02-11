@@ -8,8 +8,6 @@ import zoomPlugin from 'chartjs-plugin-zoom';
 import { useEffect, useState } from 'react';
 
 
-// Disable animating charts by default.
-//defaults.animation = false;
 
 
 // Configurações do conteúdo do gráfico
