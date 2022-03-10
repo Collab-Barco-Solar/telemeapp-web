@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { Text, View, Button, Alert, TouchableOpacity } from "react-native"
 import * as TaskManager from "expo-task-manager"
 import * as Location from "expo-location"
@@ -6,6 +6,7 @@ import styles from "./styles"
 import { Header } from "../../components/Header"
 import socket from "../../services/socketio"
 import { StatusBar } from "expo-status-bar"
+import { GlobalContext } from "../../Context/GlobalContext"
 
 
 const LOCATION_TASK_NAME = "LOCATION_TASK_NAME"
@@ -33,10 +34,14 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
     }
 })
 
-export default function Home() {
+export default function Home({navigation}) {
     // Define position state: {latitude: number, longitude: number}
     const [position, setPosition] = useState(null)
     const [running, setRunning] = useState(false)
+
+    const {
+        setData,
+    } = useContext(GlobalContext)
 
     // Request permissions right after starting the app
     useEffect(() => {
@@ -64,12 +69,11 @@ export default function Home() {
         foregroundSubscription = await Location.watchPositionAsync(
             {
                 // For better logs, we set the accuracy to the most sensitive option
-                accuracy: Location.Accuracy.BestForNavigation,
-                timeInterval: 1000,
-                distanceInterval: 0,
+                accuracy: Location.Accuracy.BestForNavigation
             },
             location => {
                 setPosition(location.coords)
+                setData(location.coords)
             }
         )
     }
@@ -108,8 +112,6 @@ export default function Home() {
         await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
             // For better logs, we set the accuracy to the most sensitive option
             accuracy: Location.Accuracy.BestForNavigation,
-            timeInterval: 1000,
-            distanceInterval: 0,
             // Make sure to enable this notification if you want to consistently track in the background
             showsBackgroundLocationIndicator: true,
             foregroundService: {
@@ -171,6 +173,7 @@ export default function Home() {
                             stopTracking()
                         } else {
                             startTracking()
+                            navigation.navigate('Info')
                         }
                     }}
                 >

@@ -28,7 +28,7 @@ export default function MiniGraph(props){
     const dadosExibidos = [props.type];
     var dadosRecebidos = props.data;
     const [chartOptions, setChartOptions] = useState({
-        animation: false,
+        animation: true,
         borderWidth: 1,
         lineWidth: 0.6,
         elements: {

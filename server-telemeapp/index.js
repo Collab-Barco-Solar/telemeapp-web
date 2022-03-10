@@ -151,6 +151,11 @@ io.on("connection", socket => {
         io.emit("gpsAtual", vetorGps)
     })
 
+    socket.on("limparDados", () => {
+        vetorDados = []
+        io.emit("allinfo", vetorDados)
+    })
+
     socket.on("resetarTudo", () => {
         vetorDados = []
         temposVoltas = []

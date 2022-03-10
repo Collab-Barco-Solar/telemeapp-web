@@ -14,37 +14,25 @@
 .topo {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
   min-height: 30vh;
   /* background-color: #4e1e1e; */
+  /* padding: 1rem; */
+}
+.mapa {
+  width: 100%;
+  height: 600px;
+  display: flex;
   padding: 1rem;
 }
 
-.meio {
-  display: flex;
-  flex-direction: row;
+.youtube {
   width: 100%;
-  height: 20vh;
-  min-height: 230px;
-  justify-content: space-between;
-  /* background-color: #204e1e; */
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  overflow: auto;
-  white-space: nowrap;
-}
-
-.fim {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  min-height: 25vh;
-  /* background-color: #3b1e4e; */
-  padding: 1rem;
+  max-width: 600px;
+  border-radius: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
