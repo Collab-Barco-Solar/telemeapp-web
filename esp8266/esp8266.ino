@@ -1,5 +1,7 @@
 #include "wifi.h"
 #include "socketio.h"
+#include "sensors.h"
+
 
 void setup()
 {
@@ -7,7 +9,14 @@ void setup()
   delay(250);
   init_wifi();
   init_socket();
+  setupDHT();
+  setupADS();
 }
+
+
+//Corrente MPPT / Corrente Alimentação / Tensão Baterias / Corrente Motor / Temperatura / Umidade /
+//Tensão Alimentação / GPS (Latitude, Longitude e Velocidade)
+
 
 unsigned long previousmillis = 0;
 void loop()
@@ -15,28 +24,22 @@ void loop()
   connection_socket();
   unsigned long currentmillis = millis();
 
-  if ((WiFi.status() != WL_CONNECTED) && (currentmillis - previousmillis >= 1000))
+
+  if (currentmillis - previousmillis >= 1000)
   {
-    Serial.print(millis());
-    Serial.println("Reconnecting to WiFi...");
-    WiFi.disconnect();
-    //    WiFi.reconnect();
-    init_wifi();
+
+    float current_mppt = get_mppt_current();
+    float current_alimentation = get_font_current();
+    float voltage_batteries = get_battery_voltage();
+    float current_motor = get_motor_current();
+    float temperature = get_temperature();
+    float humidity = get_humidity();
+    float voltage_alimentation = get_font_voltage();
+    String gps = "";
+
+    String all_info = String(current_mppt) + "," + String(current_alimentation) + "," + String(voltage_batteries) + "," + String(current_motor) + "," + String(temperature) + "," + String(humidity) + "," + String(voltage_alimentation) + "," + gps;
+    send_socket(all_info);
+    Serial.println(all_info);
     previousmillis = currentmillis;
-  }
-
-  else if (currentmillis - previousmillis >= 1000)
-  {
-    if ((WiFi.status() != WL_CONNECTED))
-    {
-      Serial.println("Sem internet");
-    }
-    else
-    {
-
-//      String all_info = "Hello world!";
-//      send_socket(all_info);
-      previousmillis = currentmillis;
-    }
   }
 }
