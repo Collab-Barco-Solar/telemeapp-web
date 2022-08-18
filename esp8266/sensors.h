@@ -16,7 +16,7 @@
 #define LIMIT_GAIN_TWO_THIRDS 6144.0
 #define RESOLUTION_16BIT 65536.0
 #define ADS1115_MPPT 0
-#define ADS1115_FONT_CURRENT 1
+//#define ADS1115_FONT_CURRENT 1
 #define ADS1115_MOTOR_CURRENT 2
 #define ADS1115_BATTERY 3
 
@@ -31,8 +31,11 @@
 
 
 //Esp pins
-#define PIN_12V_VM 35
-#define PIN_DHT 0 // pino que estamos conectado
+
+
+//#define PIN_12V_VM 35    Não será mais medido no ESP8266
+#define MPPT_VOLTAGE 0
+#define PIN_DHT 12 // D6
 
 //Corrente MPPT / Corrente Alimentação / Tensão Baterias / Corrente Motor / Temperatura / Umidade / Tensão Alimentação / GPS
 
@@ -41,6 +44,7 @@ float get_battery_voltage();
 float get_font_voltage();
 float get_font_current();
 float get_mppt_current();
+float get_mppt_voltage();
 float get_motor_current();
 float get_temperature();
 float get_humidity();

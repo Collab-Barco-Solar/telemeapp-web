@@ -17,11 +17,9 @@ void connection_socket() {
 }
 
 void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length) {
-    
-
     switch(type) {
         case sIOtype_DISCONNECT:
-            Serial.printf("[IOc] Desconectado!\n");
+            //Serial.printf("[IOc] Desconectado!\n");
             break;
         case sIOtype_CONNECT:
             Serial.printf("[IOc] Conectado ao url: %s\n", payload);
