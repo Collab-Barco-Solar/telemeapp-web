@@ -15,11 +15,10 @@
 #define LIMIT_GAIN_ONE 4096.0
 #define LIMIT_GAIN_TWO_THIRDS 6144.0
 #define RESOLUTION_16BIT 65536.0
-#define ADS1115_MPPT 0
-#define ADS1115_FONT_CURRENT 1
-#define ADS1115_MOTOR_CURRENT 2
-#define ADS1115_BATTERY 3
-
+#define ADS1115_MOTOR_CURRENT 0 //HSTS016L 100A - CORRENTE DO MOTOR
+#define ADS1115_BATTERY_CURRENT 1 //HSTS016L 150A - CORRENTE QUE SAI DO BANCO DE BATERIAS
+#define ADS1115_FONT_VOLTAGE 2 //TENSAO DE ALIMENTACAO DO ESP32
+#define ADS1115_MPPT 3 //PORTA VAZIA
 
 //Constants
 #define ESP_MAXIMUM_VOLTAGE_IN 3.3
@@ -31,17 +30,23 @@
 
 
 //Esp pins
-#define PIN_12V_VM 35
-#define PIN_DHT 0 // pino que estamos conectado
+#define PIN_ACS_1 4
+#define PIN_ACS_2 5
+//#define PIN_12V_VM 35
+#define PIN_DHT 18 // pino que estamos conectado
 
 //Corrente MPPT / Corrente Alimentação / Tensão Baterias / Corrente Motor / Temperatura / Umidade / Tensão Alimentação / GPS
 
-
-float get_battery_voltage();
+float get_motor_current();
+float get_battery_current();
 float get_font_voltage();
+
+int get_solarArray1_state();
+int get_solarArray2_state();
+
 float get_font_current();
 float get_mppt_current();
-float get_motor_current();
+
 float get_temperature();
 float get_humidity();
 void setupDHT();
