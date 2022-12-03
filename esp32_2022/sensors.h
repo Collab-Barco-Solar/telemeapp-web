@@ -26,14 +26,15 @@
 #define ACS712_VCC 5.0
 #define DHTTYPE DHT11 // DHT 11
 #define HSTS016L_NOMINAL_CURRENT 100.0
+//#define HSTS016L_NOMINAL_CURRENT 100.0
 #define HSTS016L_VARIATION 0.625 
 
 
 //Esp pins
-#define PIN_ACS_1 4
-#define PIN_ACS_2 5
+#define PIN_ACS_1 34
+#define PIN_ACS_2 35
 //#define PIN_12V_VM 35
-#define PIN_DHT 18 // pino que estamos conectado
+#define PIN_DHT 23 // pino que estamos conectado
 
 //Corrente MPPT / Corrente Alimentação / Tensão Baterias / Corrente Motor / Temperatura / Umidade / Tensão Alimentação / GPS
 
@@ -49,7 +50,9 @@ float get_mppt_current();
 
 float get_temperature();
 float get_humidity();
+
 void setupDHT();
 void setupADS();
+void acsCalibration();
 
 #endif

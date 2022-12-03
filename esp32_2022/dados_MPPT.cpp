@@ -41,8 +41,16 @@ void init_mppt(void)
 
 void read_mppt()
 {
-  if (Serial2.available())
-  {
+  
+  if (!Serial2.available()){
+    dm.tensao_bateria = -1.0;
+    dm.corrente_carregamento =-1.0;
+    dm.energia_painel = -1.0;
+    dm.rendimento_ontem = -1.0;
+    dm.potencia_ontem = -1.0;
+    dm.rendimento_hoje = -1.0;
+  }
+  else {
     String label, val;
     label = Serial2.readStringUntil('\t');                // this is the actual line that reads the label from the mppt controller
     val = Serial2.readStringUntil('\r\r\n');              // this is the line that reads the value of the label
