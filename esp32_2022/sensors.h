@@ -25,16 +25,16 @@
 #define ACS712_OUTPUT_SENSITIVITY 66.0 // 66 mV/A - https://www.allegromicro.com/~/media/files/datasheets/acs712-datasheet.ashx
 #define ACS712_VCC 5.0
 #define DHTTYPE DHT11 // DHT 11
-#define HSTS016L_NOMINAL_CURRENT 100.0
-//#define HSTS016L_NOMINAL_CURRENT 100.0
+#define HSTS016L_NOMINAL_CURRENT_100A 100.0
+#define HSTS016L_NOMINAL_CURRENT_150A 150.0
 #define HSTS016L_VARIATION 0.625 
 
 
 //Esp pins
-#define PIN_ACS_1 34
-#define PIN_ACS_2 35
+#define PIN_ACS_1 34 //GPIO34
+#define PIN_ACS_2 35 //GPIO35
 //#define PIN_12V_VM 35
-#define PIN_DHT 23 // pino que estamos conectado
+#define PIN_DHT 15 //GPIO15 pino que estamos conectado
 
 //Corrente MPPT / Corrente Alimentação / Tensão Baterias / Corrente Motor / Temperatura / Umidade / Tensão Alimentação / GPS
 
@@ -53,6 +53,6 @@ float get_humidity();
 
 void setupDHT();
 void setupADS();
-void acsCalibration();
+void sensorCalibration();
 
 #endif
