@@ -5,7 +5,5 @@
 
 void init_mppt();
 String get_dados_mppt();
-//void read_mppt();
-
 
 #endif

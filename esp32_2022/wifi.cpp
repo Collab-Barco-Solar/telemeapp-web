@@ -3,7 +3,7 @@
 const char* ssid = "Solares";
 const char* password =  "projetosolares";
 //const char* ssid = "NET_2GEA12B2";
-//const char* password =  "E2EA12B2";
+//const char* password =  "";
 unsigned long previousMillis = 0;
 
 void init_wifi(){

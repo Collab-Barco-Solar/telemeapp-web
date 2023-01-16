@@ -6,6 +6,8 @@
     4            Power+      none        -              não usar!
 */
 
+
+
 #include "dados_mppt.h"
 
 typedef struct
@@ -16,12 +18,13 @@ typedef struct
   String CS3 =  "     Bulk";
   String CS4 =  "Absorptie";
   String CS5 =  "  Druppel";
-  float tensao_bateria;
-  float corrente_carregamento; // CORRENTE DE CARREGAMENTO
-  float energia_painel; //ENERGIA DO PAINEL
-  float rendimento_ontem; //RENDIMENTO ONTEM
-  float potencia_ontem; //PODER ONTEM
-  float rendimento_hoje; //RENDIMENTO HOJE
+  float tensao_bateria;         // TENSAO NA SAIDA NO MPPT, Batt
+  float corrente_carregamento;  
+  float tensao_painel;    // TENSAO DOS PAINEIS SOLARES ("ENTRADA" DO MPPT, PV)
+ // float rendimento_ontem;       
+ // float potencia_ontem;         
+  //float rendimento_hoje;        
+  //float maxima_potencia;
 } dadosmppt;
 
 dadosmppt dm;
@@ -41,57 +44,64 @@ void init_mppt(void)
 
 void read_mppt()
 {
-  
-  if (!Serial2.available()){
+  //SE A PORTA SERIAL NÃO ESTIVER CONECTADA VAI SEMPRE MANDAR MENSAGEM DE ERRO COM VALORES NEGATIVOS
+  if (!Serial2.available()){ 
     dm.tensao_bateria = -1.0;
     dm.corrente_carregamento =-1.0;
-    dm.energia_painel = -1.0;
-    dm.rendimento_ontem = -1.0;
-    dm.potencia_ontem = -1.0;
-    dm.rendimento_hoje = -1.0;
+    dm.tensao_painel = -1.0;
+    //dm.rendimento_ontem = -1.0;
+    //dm.potencia_ontem = -1.0;
+    //dm.rendimento_hoje = -1.0;
+    //dm.maxima_potencia = -1.0;
   }
-  else {
-    String label, val;
+  else {                                                  //  The device transmits blocks of data at 1 second intervals. Each field is sent using the following format:
+    String label, val;                                    // <Newline><Field-Label><Tab><Field-Value>
     label = Serial2.readStringUntil('\t');                // this is the actual line that reads the label from the mppt controller
     val = Serial2.readStringUntil('\r\r\n');              // this is the line that reads the value of the label
     char buf[45];
 
-    if (label == "I")                                           // I chose to select certain paramaters that were good for me. check the Victron whitepaper for all labels.
-    {                                                           // In this case I chose to read charging current   
-      val.toCharArray(buf, sizeof(buf));                        // conversion of val to a character array. Don't ask me why, I saw it in one of the examples of Adafruit and it works.
-      dm.corrente_carregamento = atof(buf);                           // conversion to float
-      dm.corrente_carregamento /= 1000;                       // calculating the correct value, see the Victron whitepaper for details. The value of label I is communicated in milli amps.
+    if (label == "I")   //Medido em mA                    // I chose to select certain paramaters that were good for me. check the Victron whitepaper for all labels.
+    {                                                     // In this case I chose to read charging current   
+      val.toCharArray(buf, sizeof(buf));                  // conversion of val to a character array. Don't ask me why, I saw it in one of the examples of Adafruit and it works.
+      dm.corrente_carregamento = atof(buf);               // conversion to float
+      dm.corrente_carregamento /= 1000;                   // calculating the correct value, see the Victron whitepaper for details. The value of label I is communicated in milli amps.
     }
-    if (label == "V")
+    if (label == "V")   //Medido em mV
     {
-      val.toCharArray(buf, sizeof(buf));                    // By studying these small routines, you can modify to reading the parameters you want,
-      dm.tensao_bateria = atof(buf);                               // converting them to the desired value (milli-amps to amps or whatever)
+      val.toCharArray(buf, sizeof(buf));                  // By studying these small routines, you can modify to reading the parameters you want,
+      dm.tensao_bateria = atof(buf);                      // converting them to the desired value (milli-amps to amps or whatever)
       dm.tensao_bateria /= 1000;   
    }
-    if (label == "VPV")
+    if (label == "VPV")   //Medido em mV
     {
-      val.toCharArray(buf, sizeof(buf));                    // By studying these small routines, you can modify to reading the parameters you want,
-      dm.energia_painel = atof(buf);
-      dm.energia_painel /= 1000; // converting them to the desired value (milli-amps to amps or whatever)
+      val.toCharArray(buf, sizeof(buf));                  // By studying these small routines, you can modify to reading the parameters you want,
+      dm.tensao_painel = atof(buf);
+      dm.tensao_painel /= 1000;                          // converting them to the desired value (milli-amps to amps or whatever)
     }
-    if (label == "H22")
-    {
-      val.toCharArray(buf, sizeof(buf));
-      dm.rendimento_ontem = atof(buf);
-      dm.rendimento_ontem /= 1000;
-    }
-    if (label == "H20")
+    /*if (label == "H20")   //Medido em 0.01 kWh
     {  
       val.toCharArray(buf, sizeof(buf));
       dm.potencia_ontem = atof(buf);
       dm.potencia_ontem /= 1000;    
     }
-    if (label == "H23")
+    if (label == "H21")   //Medida em W
+    {  
+      val.toCharArray(buf, sizeof(buf));
+      dm.maxima_potencia = atof(buf);   
+    }
+    
+    if (label == "H22")   //Medida em mW
+    {
+      val.toCharArray(buf, sizeof(buf));
+      dm.rendimento_ontem = atof(buf);
+      dm.rendimento_ontem /= 1000;
+    }
+    if (label == "H23")   //Medida em mW
     {
       val.toCharArray(buf, sizeof(buf));
       dm.potencia_ontem = atof(buf);
       dm.potencia_ontem /= 1000;
-    }
+    }*/
     /*
     else if (label == "ERR")                               // This routine reads the error code. If there is no error, "Geen" will be printed. See line 24 of this sketch
     {                                                      // else the actual error code will be printed. Refer to the Victron whitepaper for reference.
@@ -144,11 +154,6 @@ String get_dados_mppt()
 {
   read_mppt();
   String result = "";
-  //result = String("tensao") + "," + String("energia") + "," + String("energia") + "," + String("rendimento");
-  result = String(dm.tensao_bateria) + "," + String(dm.corrente_carregamento) + "," + String(dm.energia_painel) + "," + String(dm.rendimento_hoje);
-            //+ String(dm.estado_carregamento) + "," + String(dm.mensagem_erro);
-//dados.rendimento_ontem; //RENDIMENTO ONTEM
-//dados.potencia_ontem; //PODER ONTEM
-
+  result = String(dm.tensao_bateria) + "," + String(dm.tensao_painel) + "," + String(dm.corrente_carregamento);
   return result;
 }
