@@ -115,8 +115,8 @@ export default function Admin(){
             }
         })
     }
-
-    if(session){
+    // MUDAR DENTRO DO IF PARA if(session)
+    if(true){
         console.log(session)
         return(
             <div className={styles.container}>
@@ -166,12 +166,10 @@ export default function Admin(){
                 </div>
 
                 <div className={styles.meio}>
-                    <MiniGraph type="current_motor" color="#fff" data={vectorDataMini}/>
-                    <MiniGraph type="current_alimentation" color="#CFF500" data={vectorDataMini}/>
-                    <MiniGraph type="voltage_alimentation" color="#59F5E9" data={vectorDataMini}/>
-                    <MiniGraph type="current_mppt" color="#00ff00" data={vectorDataMini}/>
-                    <MiniGraph type="voltage_batteries" color="#59F5E9" data={vectorDataMini}/>                    
-                    <MiniGraph type="speed" color="#E630E2" data={vectorDataMini}/>
+                    <MiniGraph type="motor_current" color="#fff" data={vectorDataMini}/>
+                    <MiniGraph type="alimentation_voltage" color="#59F5E9" data={vectorDataMini}/>
+                    <MiniGraph type="mppt_current" color="#00ff00" data={vectorDataMini}/>
+                    <MiniGraph type="batteries_voltage" color="#59F5E9" data={vectorDataMini}/>                    
                     <MiniGraph type="humidity" color="#59F5E9" data={vectorDataMini}/>
                     <MiniGraph type="temperature" color="#FF8405" data={vectorDataMini}/> 
                 </div>

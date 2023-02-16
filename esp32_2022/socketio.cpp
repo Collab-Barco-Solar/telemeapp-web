@@ -4,12 +4,14 @@ SocketIoClient socket;
 
 // inicializa o socket.io-client
 void init_socket(){
-//  socket.begin("192.168.15.37",4000);
-  socket.begin("telemeserver.herokuapp.com", 80);
+  // Se for usar o server hospedado no localhost, precisa colocar no endereço o seu ip local. Para obter isso, vá até o CMD, dê ipconfig e pegue o IPv4. A porta é o que estiver setada
+  // no código do servidor, exemplo: socket.begin("192.168.0.18",4000);
+  socket.begin("192.168.0.18",4000);
+  //socket.begin("telemeserver.herokuapp.com", 80);
   //socket.begin("server-telemeapp.herokuapp.com", 80);
 
   //Usa essa funcao caso queira receber algo do servidor socket
-//  socket.on("info", event);
+  //socket.on("info", event);
   delay(500);
 }
 

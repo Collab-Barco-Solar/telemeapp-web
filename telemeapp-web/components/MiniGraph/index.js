@@ -14,12 +14,10 @@ Chart.register(zoomPlugin);
 
 // Configurações do conteúdo do gráfico
 var InfoNames = [
-    { value: "current_motor", label: "Corrente Motor" },
-    { value: "current_alimentation", label: "Corrente Alim" },
-    { value: "voltage_alimentation", label: "Tensão Alim" },
-    { value: "current_mppt", label: "Corrente MPPT" },
-    { value: "voltage_batteries", label: "Tensão Baterias" },
-    { value: "speed", label: "Velocidade" },
+    { value: "motor_current", label: "Corrente Motor" },
+    { value: "alimentation_voltage", label: "Tensão Alim" },
+    { value: "mppt_current", label: "Corrente MPPT" },
+    { value: "batteries_voltage", label: "Tensão Baterias" },
     { value: "humidity", label: "Humidade" },
     { value: "temperature", label: "Temperatura" }
 ];
