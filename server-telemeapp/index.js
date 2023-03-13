@@ -61,7 +61,7 @@ io.on("connection", socket => {
     // console.log(vetorDados)
 
     socket.on("newinfo", (data) => {
-        //console.log(data);
+        console.log(data);
         let date_ob = new Date()
         let time = date_ob.toLocaleString('en-GB',  { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute:'2-digit', second:'2-digit'})
 

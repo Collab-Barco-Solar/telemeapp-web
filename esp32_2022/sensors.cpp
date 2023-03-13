@@ -57,6 +57,7 @@ int get_solarArray1_state(){
     array_state = 1;
   }
   return array_state;
+
 }
 
 int get_solarArray2_state(){

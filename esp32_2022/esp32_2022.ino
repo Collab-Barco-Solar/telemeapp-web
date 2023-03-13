@@ -48,6 +48,7 @@ void loop()
 
     String all_info =  String(motor_current) + "," + String(battery_current) + "," + String(temperature) + "," + String(humidity)
                         + "," + String(voltage_alimentation) + "," + String(solarArray1_state) + "," + String(solarArray2_state) + "," + result;
+  
     send_socket(all_info);
 
     previousmillis = currentmillis;
